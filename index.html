@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aaditi Orbit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one dark stage. Headline + live role line on the left, a CSS-only orbit of the stack on the right, project cards underneath. */
+:root{
+  --bg:#0b0d14;
+  --ink:#f3f1ec;
+  --muted:#9a9ba8;
+  --line:rgba(150,170,255,.18);
+  --blue:#3b6bff;
+  --orange:#ff7a2f;
+  --teal:#19c3a6;
+  --card:rgba(18,22,38,.72);
+  --display:"Bricolage Grotesque","Arial Narrow",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0;overflow-x:hidden;position:relative;min-height:100vh;
+}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);opacity:.5;pointer-events:none;z-index:0;will-change:transform}
+.b1{width:520px;height:520px;left:-160px;top:-120px;background:var(--blue);animation:drift 16s ease-in-out infinite alternate}
+.b2{width:460px;height:460px;right:-140px;bottom:-100px;background:var(--orange);opacity:.38;animation:drift 20s ease-in-out infinite alternate-reverse}
+.b3{width:380px;height:380px;left:38%;bottom:-200px;background:var(--teal);opacity:.3;animation:drift 24s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(70px,40px) scale(1.15)}}
+
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding-block:36px 64px;overflow-x:clip}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.mark{display:flex;align-items:center;gap:10px;color:var(--ink);font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.02em}
+.mark i{width:22px;height:22px;border-radius:6px;background:linear-gradient(145deg,#ff9a71,#e95235);position:relative;box-shadow:0 0 14px rgba(255,112,69,.5)}
+.mark i::before,.mark i::after{content:"";position:absolute;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent}
+.mark i::before{top:4px;border-bottom:6px solid #17130e}
+.mark i::after{bottom:4px;border-top:6px solid #17130e}
+.live{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;background:var(--card)}
+.live b{width:7px;height:7px;border-radius:50%;background:#67dba9;box-shadow:0 0 8px #4cd29d;animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.7)}}
+
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:24px;margin-top:40px}
+.hero h1{margin:0;font-weight:300;font-size:clamp(38px,5.6vw,80px);line-height:1;letter-spacing:-.05em;text-wrap:balance}
+.hero h1 strong{display:block;font-weight:800;color:#fff}
+.hero h1 span{display:block;color:var(--muted)}
+.rise{animation:rise 1s cubic-bezier(.22,1,.36,1) both}
+.d1{animation-delay:.12s}.d2{animation-delay:.26s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.role{margin:26px 0 0;font-family:var(--mono);font-size:clamp(14px,1.6vw,18px);color:var(--ink);min-height:1.6em}
+.role em{font-style:normal;color:var(--teal)}
+.role .caret{display:inline-block;width:.55ch;height:1.1em;vertical-align:-.15em;margin-left:2px;background:var(--orange);animation:blink 1s steps(2) infinite}
+.lede{max-width:46ch;margin:14px 0 0;color:var(--muted);font-size:17px;line-height:1.55}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.stat{padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card);backdrop-filter:blur(8px)}
+.stat b{display:block;font-size:26px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+
+/* orbit system */
+.orbit{position:relative;width:min(520px,100%);aspect-ratio:1;margin:0 auto;justify-self:center;container-type:inline-size}
+.core{position:absolute;inset:37%;border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:800;font-size:clamp(13px,2vw,20px);letter-spacing:-.02em;line-height:1.1;
+  background:radial-gradient(circle at 35% 30%,#2fe0c0,#0e6f6c 70%);box-shadow:0 0 60px rgba(25,195,166,.45),inset 0 -8px 24px rgba(0,0,0,.35);animation:breathe 4s ease-in-out infinite}
+.core small{display:block;font-family:var(--mono);font-weight:400;font-size:.55em;opacity:.8;margin-top:3px}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.ring{position:absolute;border-radius:50%;border:1px dashed var(--line);animation:spin var(--t) linear infinite}
+.r1{--t:22s;inset:26%}
+.r2{--t:34s;inset:17%;animation-direction:reverse}
+.r3{--t:50s;inset:8%}
+@keyframes spin{to{transform:rotate(360deg)}}
+.chip{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a)) translateX(var(--r))}
+.r1 .chip{--r:24cqw}
+.r2 .chip{--r:33cqw}
+.r3 .chip{--r:42cqw}
+.chip .u{position:absolute;transform:rotate(calc(-1*var(--a)))}
+.chip .v{position:absolute;animation:spin var(--t) linear infinite reverse}
+.r2 .chip .v{animation-direction:normal}
+.chip .v span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;padding:6px 11px;border-radius:99px;border:1px solid var(--line);background:rgba(10,14,28,.82);backdrop-filter:blur(8px);font-family:var(--mono);font-size:clamp(10px,1.3vw,12px);font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:7px}
+.chip .v span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c,var(--teal));box-shadow:0 0 8px var(--c,var(--teal))}
+.sat{position:absolute;width:8px;height:8px;border-radius:50%;background:#cfe2ff;box-shadow:0 0 10px #8fb4ff}
+
+/* projects */
+h2{margin:72px 0 18px;font-size:14px;font-family:var(--mono);font-weight:600;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
+.card{position:relative;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--card);backdrop-filter:blur(10px);overflow:hidden;transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .35s;min-width:0}
+.card::after{content:"";position:absolute;inset:auto -30% -60% -30%;height:80%;background:radial-gradient(closest-side,var(--c),transparent);opacity:0;transition:opacity .4s}
+.card:hover{transform:translateY(-6px) rotate(-.4deg);border-color:rgba(160,185,255,.5)}
+.card:hover::after{opacity:.35}
+.card h3{margin:0 0 8px;font-size:21px;font-weight:800;letter-spacing:-.03em;position:relative;z-index:1}
+.card p{margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.5;position:relative;z-index:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;position:relative;z-index:1}
+.tags span{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--ink)}
+.card .kpi{font-family:var(--mono);font-size:12px;color:var(--c);margin-bottom:10px;position:relative;z-index:1}
+footer{margin-top:56px;font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 20px}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;margin-top:28px}
+  .orbit{margin-top:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+
+<div class="wrap">
+  <nav class="rise">
+    <div class="mark"><i></i>Aaditi</div>
+    <div class="live"><b></b>Open to internships</div>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <h1>
+        <span class="rise d1">Building</span>
+        <strong class="rise d2">AI-powered</strong>
+        <span class="rise d3">web applications.</span>
+      </h1>
+      <p class="role rise d3">&gt; <em id="typed"></em><span class="caret"></span></p>
+      <p class="lede rise d4">Aaditi Ajnadkar. B.Tech Information Technology at SAKEC, Mumbai. Research Lead Intern at Quiet Gesture, a health-tech startup building gesture recognition for people with paralysis.</p>
+      <div class="stats rise d4">
+        <div class="stat"><b>9.13</b><span>CGPA · SEM 1–4</span></div>
+        <div class="stat"><b>4</b><span>LIVE-DEPLOYED PROJECTS</span></div>
+        <div class="stat"><b>26</b><span>BACKEND TESTS PASSING</span></div>
+      </div>
+    </div>
+
+    <div class="orbit rise d2" aria-label="Animated orbit of the technologies I use">
+      <div class="ring r1">
+        <div class="chip" style="--a:0deg"><div class="u"><div class="v" style="--t:22s"><span style="--c:#61dafb">React</span></div></div></div>
+        <div class="chip" style="--a:180deg"><div class="u"><div class="v" style="--t:22s"><span style="--c:#ffd462">Python</span></div></div></div>
+      </div>
+      <div class="ring r2">
+        <div class="chip" style="--a:50deg"><div class="u"><div class="v" style="--t:34s"><span style="--c:#c69ff7">FAISS</span></div></div></div>
+        <div class="chip" style="--a:170deg"><div class="u"><div class="v" style="--t:34s"><span style="--c:#19c3a6">FastAPI</span></div></div></div>
+        <div class="chip" style="--a:290deg"><div class="u"><div class="v" style="--t:34s"><span style="--c:#ff7a2f">SQL</span></div></div></div>
+      </div>
+      <div class="ring r3">
+        <div class="chip" style="--a:20deg"><div class="u"><div class="v" style="--t:50s"><span style="--c:#3b6bff">TypeScript</span></div></div></div>
+        <div class="chip" style="--a:140deg"><div class="u"><div class="v" style="--t:50s"><span style="--c:#ff7a2f">LLM API</span></div></div></div>
+        <div class="chip" style="--a:260deg"><div class="u"><div class="v" style="--t:50s"><span style="--c:#ff4b4b">Streamlit</span></div></div></div>
+      </div>
+      <div class="core"><div>RAG<small>retrieve · ground · answer</small></div></div>
+    </div>
+  </section>
+
+  <h2>Projects</h2>
+  <div class="grid">
+    <article class="card rise d1" style="--c:#19c3a6">
+      <div class="kpi">200+ KB entries</div>
+      <h3>SAP Error Decoder</h3>
+      <p>RAG pipeline: FAISS retrieval feeds an LLM API for grounded root-cause analysis. Live on Vercel and Render.</p>
+      <div class="tags"><span>React</span><span>FAISS</span><span>LLM API</span></div>
+    </article>
+    <article class="card rise d2" style="--c:#3b6bff">
+      <div class="kpi">26 tests passing</div>
+      <h3>QRShield</h3>
+      <p>HMAC-signed payment QR payloads, verified by FastAPI to detect tampering, shown on a React dashboard.</p>
+      <div class="tags"><span>React</span><span>TypeScript</span><span>FastAPI</span></div>
+    </article>
+    <article class="card rise d3" style="--c:#ff7a2f">
+      <div class="kpi">4 risk bands</div>
+      <h3>CardioGuard AI</h3>
+      <p>Rule-based cardiac risk awareness with voice input and nearby hospital detection. Educational prototype.</p>
+      <div class="tags"><span>JavaScript</span><span>Web Speech</span><span>Geolocation</span></div>
+    </article>
+    <article class="card rise d4" style="--c:#c69ff7">
+      <div class="kpi">High · Medium · Low</div>
+      <h3>StockSense</h3>
+      <p>Inventory app on MySQL with login, CRUD and risk classification of slow-moving stock in Streamlit.</p>
+      <div class="tags"><span>Python</span><span>MySQL</span><span>Streamlit</span></div>
+    </article>
+  </div>
+
+  <footer>
+    <span>aaditiajnadkar30@gmail.com</span>
+    <span>github.com/Ajnaaditi30</span>
+    <span>Mumbai, India</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var words=["React + Python developer","RAG and LLM apps with FAISS","Research Lead Intern","IT student at SAKEC"];
+  var el=document.getElementById('typed');
+  if(!el)return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=words[0];return;}
+  var w=0,c=0,del=false;
+  function tick(){
+    var full=words[w];
+    el.textContent=full.slice(0,c);
+    if(!del&&c<full.length){c++;setTimeout(tick,70);}
+    else if(!del){del=true;setTimeout(tick,1400);}
+    else if(c>0){c--;setTimeout(tick,34);}
+    else{del=false;w=(w+1)%words.length;setTimeout(tick,300);}
+  }
+  tick();
+})();
+</script>
+
+</body>
+</html>
